@@ -10,17 +10,27 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script>
+    <script>
+        // load the library and ALL languages
+        hljs.highlightAll();
+
+        window.onload = function() {
+            window.scrollTo(0, document.body.scrollHeight);
+        };
+    </script>
 </head>
 
 <body class="antialiased">
     <div class="flex flex-col space-y-4 p-4">
         @foreach($messages as $message)
-        <div class="flex rounded-lg p-4 @if ($message['role'] === 'assistant') bg-green-200 flex-reverse @else bg-blue-200 @endif ">
+        <div class="flex rounded-lg p-4 @if ($message['role'] === 'assistant') flex-reverse bg-green-200 @else bg-blue-200 @endif ">
             <div class="ml-4">
-                <div class="text-lg">
+                <div class="text-lg @if($message['role'] === 'assistant') bg-green-20 @else bg-blue-200 @endif">
                     @if ($message['role'] === 'assistant')
-                    <a href="#" class="font-medium text-gray-900">GeekChat</a>
+                    <a href="#" class="font-medium text-gray-900">AI</a>
                     @else
                     <a href="#" class="font-medium text-gray-900">你</a>
                     @endif
@@ -35,9 +45,9 @@
         @endforeach
     </div>
 
-    <form class="p-4 flex space-x-4 justify-center items-center" action="/chat" method="post">
+    <form id="chat-submit" class="p-4 flex space-x-4 justify-center items-center" action="/chat" method="post">
         @csrf
-        <input id="message" placeholder="输入你的问题..." type="text" name="message" autocomplete="off" class="border rounded-md  p-2 flex-1" required />
+        <textarea id="message" placeholder="输入你的问题..."  name="message" autocomplete="off" class="border rounded-md  p-2 flex-1"></textarea>
         <button class="flex items-center justify-center px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md text-sm md:text-base" type="submit">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
@@ -50,13 +60,6 @@
         </button>
     </form>
 
-    <footer class="text-center sm:text-left">
-        <div class="p-4 text-center text-neutral-700">
-            GeekChat演示版由
-            <a href="https://geekr.dev" target="_blank" class="text-neutral-800 dark:text-neutral-400">极客书房</a>
-            友情赞助
-        </div>
-    </footer>
 </body>
 
 </html>
